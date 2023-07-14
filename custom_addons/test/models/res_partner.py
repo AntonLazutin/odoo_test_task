@@ -8,7 +8,7 @@ import subprocess
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    name = fields.Char(index=True, default_export_compatible=True, compute='_recompute_name', inverse='_inverse_name') #doesn't work :(
+    name = fields.Char(index=True, default_export_compatible=True, compute='_recompute_name', inverse='_inverse_name')
     department = fields.Char()
     first_name = fields.Char()
     surname = fields.Char()
