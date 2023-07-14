@@ -7,13 +7,8 @@
         <field name="type">form</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='name']" position="attributes">
-                <attribute name="required">False</attribute>
-            </xpath>
-            <xpath expr="//field[@id='individual']" attrs="{'required' : False}" position="attributes">
-<!--                <attribute name="invisible">True</attribute>-->
-<!--                     <attribute name="readonly">True</attribute>-->
-<!--                    <attribute name="required">False</attribute>-->
+            <xpath expr="//field[@id='individual']" position="attributes">
+                    <attribute name="required">False</attribute>
             </xpath>
             <xpath expr="//field[@id='company']" attrs="{'required' : [('is_company'), '=', 'False']}" >
                 <attribute name="required">False</attribute>
@@ -38,10 +33,8 @@
              <xpath expr="//div[@class='d-flex justify-content-between']" position="after">
                 <field name="origin_country" placeholder="Origin country"/>
              </xpath>
-            <xpath expr="//field[@name='phone']" position="after">
-                 <group>
+            <xpath expr="//field[@name='phone']" position="after">w
                      <field name="experience" string="Experience"/>
-                 </group>
              </xpath>
         </field>
     </record>

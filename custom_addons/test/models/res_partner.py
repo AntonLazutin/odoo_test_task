@@ -19,17 +19,10 @@ class ResPartner(models.Model):
     def create(self, vals_list):
         if vals_list['company_type'] == 'person':
             vals_list['name'] = f'{vals_list["first_name"]} {vals_list["surname"]}'
-        print(vals_list)
-        return super(ResPartner, self).create(vals_list) #поле имя не пропускает пробел между именем и фамилией
+        return super(ResPartner, self).create(vals_list)
 
     @api.constrains('experience')
     def _check_experience(self):
-        """
-        Validation for experience field
-        Examples:
-        1. User tries to save form with negative experience number -> field is set to 0 anyway
-        2. User tries to save form with experience number higher, than 70 -> too unrealistic, error is raised
-        """
         if self.experience < 0:
             self.experience = 0
         elif self.experience > 70:
@@ -71,10 +64,3 @@ class ResPartner(models.Model):
             regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
             if not re.fullmatch(regex, record.email):
                 raise ValidationError('Invalid email format')
-
-    _sql_constraints = [
-        ('check_name', 'CHECK(1=1)', ""),
-    ]
-
-
-    # перенастроить create метод
