@@ -7,17 +7,21 @@
         <field name="type">form</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@id='individual']" position="attributes">
-                    <attribute name="required">False</attribute>
-            </xpath>
-            <xpath expr="//field[@id='company']" attrs="{'required' : [('is_company'), '=', 'False']}" >
-                <attribute name="required">False</attribute>
-            </xpath>
+<!--              <xpath expr="//field[@id='individual']" position="after">-->
+<!--                    <button name="action_dump_db" string="Dump DB" type="object"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@id='individual']" position="attributes">-->
+<!--                    <attribute name="required">False</attribute>-->
+<!--            </xpath>-->
             <xpath expr="//field[@name='company_type']" position="after">
                 <group attrs="{'invisible': [('is_company', '=', True)]}">
                     <field name="first_name"/>
                     <field name="surname" attrs="{'invisible': [('first_name', '=', False)]}"/>
+<!--                    <button name="action_dump_db" string="Dump DB" type="action"/>-->
                 </group>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="invisible">False</attribute>
             </xpath>
             <field name="phone" position="attributes">
                 <attribute name="required">True</attribute>
@@ -36,6 +40,7 @@
             <xpath expr="//field[@name='phone']" position="after">w
                      <field name="experience" string="Experience"/>
              </xpath>
+
         </field>
     </record>
 

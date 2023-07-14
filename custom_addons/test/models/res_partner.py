@@ -1,13 +1,14 @@
 from odoo import api, models, fields
 import re
-
 from odoo.exceptions import ValidationError
+import gzip
+import subprocess
 
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    name = fields.Char(index=True, default_export_compatible=True, required=False) #doesn't work :(
+    name = fields.Char(index=True, default_export_compatible=True, compute='_recompute_name', inverse='_inverse_name') #doesn't work :(
     department = fields.Char()
     first_name = fields.Char()
     surname = fields.Char()
@@ -64,3 +65,33 @@ class ResPartner(models.Model):
             regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
             if not re.fullmatch(regex, record.email):
                 raise ValidationError('Invalid email format')
+
+    @api.onchange('first_name', 'surname')
+    def _recompute_name(self):
+        for record in self:
+            if record.first_name and not record.surname:
+                record.name = f'{record.first_name}'
+            elif record.first_name and record.surname:
+                record.name = f'{record.first_name} {record.surname}'
+            else:
+                record.name = ''
+
+    def _inverse_name(self):
+        for record in self:
+            if record.name:
+                name_arr = record.name.split(' ')
+                print(name_arr)
+                record.first_name = name_arr[0]
+                if len(name_arr) > 1:
+                    record.surname = name_arr[1]
+
+    def action_dump_db(self):
+        cmd = 'pg_dump -U odoo -F d db > db_backup'
+        with gzip.open('backup.gz', 'wb') as f:
+            popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+
+            for stdout_line in iter(popen.stdout.readline, ''):
+                f.write(stdout_line.encode('utf - 8'))
+
+                popen.stdout.close()
+                popen.wait()
